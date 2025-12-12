@@ -56,27 +56,27 @@ class EvaluadorContrasenas:
         elif segundos < 31536000 * 1_000_000_000:
             return f"{segundos/(31536000*1_000_000):.2f} millones de años"
         else:
-            return f"{segundos/(31536000*1_000_000_000):.2e} miles de millones de años"
+            return f"{segundos/(31536000*1_000_000_000):.2f} miles de millones de años"
     
-    def detectar_patrones(self, contraseña):
+    def detectar_patrones(self, contrasena):
         """
         Detecta patrones débiles en la contraseña
         """
         problemas = []
         
-        if contraseña.lower() in self.contraseñas_comunes:
+        if contrasena.lower() in self.contrasenas_comunes:
             problemas.append("Es una contraseña muy común")
         
-        if re.search(r'(012|123|234|345|456|567|678|789|890)', contraseña):
+        if re.search(r'(012|123|234|345|456|567|678|789|890)', contrasena):
             problemas.append("Contiene secuencias numéricas")
         
-        if re.search(r'(abc|bcd|cde|def|efg|fgh|ghi|hij|ijk)', contraseña.lower()):
+        if re.search(r'(abc|bcd|cde|def|efg|fgh|ghi|hij|ijk)', contrasena.lower()):
             problemas.append("Contiene secuencias alfabéticas")
         
-        if re.search(r'(.)\1{2,}', contraseña):
+        if re.search(r'(.)\1{2,}', contrasena):
             problemas.append("Tiene caracteres repetidos consecutivamente")
         
-        if len(contraseña) < 8:
+        if len(contrasena) < 8:
             problemas.append("Contraseña demasiado corta (mínimo 8 caracteres)")
         
         return problemas
@@ -96,11 +96,11 @@ class EvaluadorContrasenas:
         else:
             return {'nivel': 'MUY SEGURA', 'puntuacion': 5}
     
-    def evaluar(self, contraseña):
+    def evaluar(self, contrasena):
         """
         Evalúa completamente una contraseña
         """
-        if len(contraseña) == 0:
+        if len(contrasena) == 0:
             return {
                 'nivel': 'Sin contraseña',
                 'puntuacion': 0,
@@ -110,9 +110,9 @@ class EvaluadorContrasenas:
                 'longitud': 0
             }
         
-        entropia = self.calcular_entropia(contraseña)
+        entropia = self.calcular_entropia(contrasena)
         tiempo_hackeo = self.calcular_tiempo_hackeo(entropia)
-        problemas = self.detectar_patrones(contraseña)
+        problemas = self.detectar_patrones(contrasena)
         clasificacion = self.clasificar_seguridad(entropia)
         
         return {
@@ -121,5 +121,5 @@ class EvaluadorContrasenas:
             'entropia': entropia,
             'tiempo_hackeo': tiempo_hackeo,
             'problemas': problemas,
-            'longitud': len(contraseña)
+            'longitud': len(contrasena)
         }

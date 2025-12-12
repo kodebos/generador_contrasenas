@@ -57,13 +57,33 @@ class Interfaz:
         """
         print("\n--- GENERADOR DE CONTRASEÑAS ---")
         try:
-            longitud = int(input("Logitud de la contraseña (recomendado: 16+): ") or "16")
+            while True:
+                longitud_input = input("Logitud de la contraseña (recomendado: 16+): ") .strip()
+                
+                if not longitud_input:
+                    longitud = 16
+                    break
 
+                longitud = int(longitud_input)
+
+                if longitud < 8:
+                    print("Error: La longitud minima es 8 caracteres. Intenta de nuevo.")
+                    continue
+                elif longitud > 128:
+                    print("Error: La longitud maxima es 128 caracteres. Intenta de nuevo.")
+                    continue
+                else:
+                    break
+            
             print("\nQue tipos de caracteres deseas incluir?")
             mayusculas = input("Mayusculas (A-Z)? (s/n): ").lower() == 's'
             minusculas = input("Minusculas (a-z)? (s/n): ").lower() == 's'
             numeros = input("Numeros (0-9)? (s/n): ").lower() == 's'
             simbolos = input("Simbolos (!@#$...)? (s/n): ").lower() == 's'
+
+            if not any([mayusculas, minusculas, numeros, simbolos]):
+                print("\nError: Debes seleccionar al menos un tipo de caracter.")
+                return
 
             contrasena = self.generador.generar(
                 longitud, mayusculas, minusculas, numeros, simbolos
@@ -77,7 +97,7 @@ class Interfaz:
                 self.mostrar_analisis(resultado)
 
         except ValueError as e:
-            print(f"Error: {e}")
+            print("Error: Ingresa un numero valido")
 
     def menu_evaluar(self):
         """
@@ -94,8 +114,24 @@ class Interfaz:
         """
         print("\n--- GENERADOR MULTIPLE ---")
         try:
-            cantidad = int(input("Cuantas contraseñas deseas generar? (1-20): ") or "5")
-            cantidad = min(max(cantidad, 1), 20)
+            while True:
+                cantidad_input = input("Cuantas contraseñas deseas generar? (1-20): ").strip()
+
+                if not cantidad_input:
+                    cantidad = 5
+                    break
+
+                cantidad = int(cantidad_input)
+
+                if cantidad < 1:
+                    print("Error: Debes generar al menos 1 contraseña. Intenta de nuevo.")
+                    continue
+                elif cantidad > 20:
+                    print("Error: El maximo es 20 contraseñas. Intenta de nuevo.")
+                    continue
+                else:
+                    break
+
             longitud = int(input("Longitud de las contraseñas: ") or "16")
 
             contrasenas = self.generador.generar_multiple(
@@ -113,8 +149,8 @@ class Interfaz:
                 print(f"{i}. {pwd}")
             print("-" * 60)
 
-        except ValueError as e:
-            print(f"Error: {e}")
+        except ValueError:
+            print(f"Error: Ingresa un numero valido")
     
     def ejecutar(self):
         """
